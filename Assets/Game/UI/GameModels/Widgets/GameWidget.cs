@@ -14,10 +14,8 @@ namespace Game.UI.GameModels.Widgets
         {
             model.CurrentGame.Subscribe(data =>
             {
-                //gamePresenters.SetGame()
+                _gamePresenters.SetGame(data);
             }).AddTo(bindings);
-            
-            
         }
     }
 }

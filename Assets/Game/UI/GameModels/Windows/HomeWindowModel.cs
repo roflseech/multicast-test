@@ -32,11 +32,11 @@ namespace Game.UI.GameModels.Windows
                 new TextWidgetModel(START_GAME_TEXT, true),
                 () =>
                 {
-                    _levelSelector.SetCurrentLevel();
+                    _levelSelector.SetLastAvailableLevel();
                     _uiAggregate.Get(UiLayer.Main).OpenSingletonWindow<IBaseGameplayWindowModel>();
                 });
         
-        public ITextWidgetModel GamesPlayed => _gamesPlayed ??= new TextWidgetModel(GAMES_PLAYED_TEXT, true, _playerStatistics.Value.GamesPlayed.ToString());
+        public ITextWidgetModel GamesPlayed => _gamesPlayed ??= new TextWidgetModel(GAMES_PLAYED_TEXT, true, _playerStatistics.Value.LevelsCompleted.ToString());
         
         public HomeWindowModel(IReadOnlySaveData<PlayerStatistics> playerStatistics, IUiAggregate uiAggregate, 
             ILevelSelector levelSelector)

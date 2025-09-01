@@ -17,7 +17,6 @@ namespace Game.AssetManagement
         
         public async UniTask PreloadAsset<T>(string path) where T : Object
         {
-            Debug.Log($"Preloading asset: {path}");
             if (_assets.ContainsKey(path))
             {
                 Debug.LogError($"Prefab already preloaded: {path}");

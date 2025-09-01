@@ -1,0 +1,25 @@
+{
+  "Rows": 4,
+  "Columns": 6,
+  "TargetWords": [
+    "MOTHER",
+    "DINNER",
+    "ANCHOR",
+    "POSTER"
+  ],
+  "AvailableCLusters": [
+    "MOT",
+    "HER",
+    "DIN",
+    "NER",
+    "ANC",
+    "HOR",
+    "POS",
+    "TER",
+    "BAT",
+    "CUP",
+    "EGG",
+    "FLY",
+    "GYM"
+  ]
+}

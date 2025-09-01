@@ -1,0 +1,25 @@
+{
+  "Rows": 4,
+  "Columns": 6,
+  "TargetWords": [
+    "GARDEN",
+    "SISTER",
+    "MARKET",
+    "PLAYER"
+  ],
+  "AvailableCLusters": [
+    "GAR",
+    "DEN",
+    "SIS",
+    "TER",
+    "MAR",
+    "KET",
+    "PLA",
+    "YER",
+    "HOT",
+    "CAR",
+    "BIG",
+    "OLD",
+    "NEW"
+  ]
+}

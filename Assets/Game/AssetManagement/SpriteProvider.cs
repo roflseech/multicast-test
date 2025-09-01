@@ -13,25 +13,6 @@ namespace Game.AssetManagement
         {
             _assetProvider = assetProvider;
         }
-        
-       /* public async UniTask<Sprite> GetSprite(string path)
-        {
-            var state = _assetProvider.GetAssetState(path);
-            
-            if (state == AssetState.Loaded)
-            {
-                return _assetProvider.GetAsset(path) as Sprite;
-            }
-            
-            if (state == AssetState.NotLoaded)
-            {
-                await _assetProvider.PreloadAsset(path);
-                return _assetProvider.GetAsset(path) as Sprite;
-            }
-            
-            await _assetProvider.AssetLoaded.Where(loadedPath => loadedPath == path).Take(1);
-            return _assetProvider.GetAsset(path) as Sprite;
-        }*/
 
         public IObservable<Sprite> GetSpriteAsObservable(string path)
         {

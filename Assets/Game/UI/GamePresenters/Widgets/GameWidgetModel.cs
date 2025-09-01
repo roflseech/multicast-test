@@ -1,5 +1,7 @@
 using System;
+using Game.Common.UniRXExtensions;
 using Game.Gameplay;
+using UniRx;
 
 namespace Game.UI.GamePresenters.Widgets
 {
@@ -11,12 +13,14 @@ namespace Game.UI.GamePresenters.Widgets
     
     public class GameWidgetModel : IGameWidgetModel
     {
-        public IObservable<GameState> State { get; }
-        public IObservable<GameParams> CurrentGame { get; }
+        private readonly ObservableValue<GameState> _state = new();
+        private readonly ObservableValue<GameParams> _currentGame = new(GameParams.Undefined);
+        public IObservable<GameState> State => _state;
+        public IObservable<GameParams> CurrentGame => _currentGame.Where(x => x.IsValid());
 
-        void SetGame(GameParams gameParams)
+        public void SetGame(GameParams gameParams)
         {
-            
+            _currentGame.Value = gameParams;
         }
     }
 }

@@ -1,0 +1,25 @@
+{
+  "Rows": 4,
+  "Columns": 6,
+  "TargetWords": [
+    "DRAGON",
+    "STABLE",
+    "BOTTLE",
+    "FINGER"
+  ],
+  "AvailableCLusters": [
+    "DRA",
+    "GON",
+    "STA",
+    "BLE",
+    "BOT",
+    "TLE",
+    "FIN",
+    "GER",
+    "AIR",
+    "SEA",
+    "TAX",
+    "VAN",
+    "ZOO"
+  ]
+}

@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using Cysharp.Threading.Tasks;
+using Game.AssetManagement;
 using Game.UI.GameLayers;
 using Game.UI.GameModels.Windows;
 using UnityEngine;
@@ -32,21 +33,21 @@ namespace Game.AppFlow.EntryPoints
         {
             private readonly ICoreInitializer _coreInitializer;
             private readonly IUiAggregate _uiAggregate;
-            private readonly IHomeWindowModel _homeWindowModel;
+            private readonly ILevelLoader _levelLoader;
             
-            public EntryPoint(ICoreInitializer coreInitializer, IUiAggregate uiAggregate, IHomeWindowModel homeWindowModel)
+            public EntryPoint(ICoreInitializer coreInitializer, IUiAggregate uiAggregate, ILevelLoader levelLoader)
             {
                 _coreInitializer = coreInitializer;
                 _uiAggregate = uiAggregate;
-                _homeWindowModel = homeWindowModel;
+                _levelLoader = levelLoader;
             }
         
             public async UniTask StartAsync(CancellationToken cancellation = new CancellationToken())
             {
                 await _coreInitializer.InitAsync();
+                await _levelLoader.UpdateDatabaseAsync();
                 await _uiAggregate.Get(UiLayer.Main).PreloadAllWindows();
-                
-                _uiAggregate.Get(UiLayer.Main).OpenWindow(_homeWindowModel);
+                _uiAggregate.Get(UiLayer.Main).OpenSingletonWindow<IHomeWindowModel>();
             }
         }
     }

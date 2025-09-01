@@ -1,0 +1,25 @@
+{
+  "Rows": 4,
+  "Columns": 6,
+  "TargetWords": [
+    "PLANET",
+    "FOREST",
+    "ANIMAL",
+    "WINDOW"
+  ],
+  "AvailableCLusters": [
+    "PLA",
+    "NET",
+    "FOR",
+    "EST",
+    "ANI",
+    "MAL",
+    "WIN",
+    "DOW",
+    "ICE",
+    "BOX",
+    "JOY",
+    "RUN",
+    "KEP"
+  ]
+}

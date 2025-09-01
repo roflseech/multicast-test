@@ -11,7 +11,7 @@ namespace Game.Gameplay
 
         public void SetGame(GameParams gameParams)
         {
-            
+            UnityEngine.Debug.Log($"SET GAME: {gameParams.GameName} {gameParams.Level} {gameParams.LevelData}");
         }
     }
 }

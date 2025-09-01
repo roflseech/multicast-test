@@ -1,0 +1,25 @@
+{
+  "Rows": 4,
+  "Columns": 6,
+  "TargetWords": [
+    "CASTLE",
+    "BRIDGE",
+    "FLOWER",
+    "PARENT"
+  ],
+  "AvailableCLusters": [
+    "CAS",
+    "TLE",
+    "BRI",
+    "DGE",
+    "FLO",
+    "WER",
+    "PAR",
+    "ENT",
+    "SUN",
+    "TOP",
+    "MIX",
+    "QUA",
+    "ZED"
+  ]
+}

@@ -52,6 +52,7 @@ namespace Game.AppFlow
         {
             builder.BindSingleton<AddressablesAssetProvider>();
             builder.BindSingleton<SpriteProvider>();
+            builder.BindSingleton<AddressablesLevelLoader>();
         }
         
         private void InstallConfigs(IContainerBuilder builder)
@@ -72,6 +73,7 @@ namespace Game.AppFlow
 
         private void InstallDomainLogic(IContainerBuilder builder)
         {
+            builder.BindSingleton<CurrentGame>();
             builder.BindSingleton<LevelSelector>();
         }
         

@@ -5,6 +5,6 @@ namespace Game.State
     [MemoryPackable]
     public partial struct PlayerStatistics
     {
-        public int GamesPlayed;
+        public int LevelsCompleted;
     }
 }

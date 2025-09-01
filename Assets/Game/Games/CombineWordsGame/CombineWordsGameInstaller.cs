@@ -1,6 +1,6 @@
 ﻿using VContainer.Unity;
 
-namespace Game.Game.CombineWordsGame
+namespace Game.Games.CombineWordsGame
 {
     public class CombineWordsGameInstaller : LifetimeScope
     {

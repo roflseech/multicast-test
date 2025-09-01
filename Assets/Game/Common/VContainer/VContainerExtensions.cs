@@ -22,6 +22,11 @@ namespace Game.Common.VContainer
             builder.Register<T>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         }
 
+        public static void BindTransient<T>(this IContainerBuilder builder)
+        {
+            builder.Register<T>(Lifetime.Transient).AsImplementedInterfaces().AsSelf();
+        }
+        
         public static void BindComponent<T>(this IContainerBuilder builder, T component)
         {
             builder.RegisterInstance<T>(component).AsImplementedInterfaces().AsSelf();

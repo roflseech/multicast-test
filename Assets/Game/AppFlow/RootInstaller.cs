@@ -50,7 +50,10 @@ namespace Game.AppFlow
         
         private void InstallResourceManagement(IContainerBuilder builder)
         {
-            builder.BindSingleton<AddressablesAssetProvider>();
+            //транзиент, чтобы разные потребители ассет провайдера не конфликтовали между собой - не было ситуации, что один выгрузил то, что нужно другому
+            builder.BindTransient<AddressablesAssetProvider>();
+            
+            builder.BindSingleton<GameDataLoader>();
             builder.BindSingleton<SpriteProvider>();
             builder.BindSingleton<AddressablesLevelLoader>();
         }

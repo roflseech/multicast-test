@@ -16,22 +16,7 @@ namespace Game.AssetManagement
 
         public IObservable<Sprite> GetSpriteAsObservable(string path)
         {
-            var state = _assetProvider.GetAssetState(path);
-
-            if (state == AssetState.Loaded)
-            {
-                return Observable.Return(_assetProvider.GetAsset<Sprite>(path));
-            }
-
-            if (state == AssetState.NotLoaded)
-            {
-                _assetProvider.PreloadAsset<Sprite>(path).Forget();
-            }
-
-            return _assetProvider.AssetLoaded
-                .Where(loadedPath => loadedPath == path)
-                .Take(1)
-                .Select(_ => _assetProvider.GetAsset<Sprite>(path));
+            return _assetProvider.LoadAssetAsObservable<Sprite>(path);
         }
     }
 }

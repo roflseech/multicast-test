@@ -8,22 +8,14 @@ namespace Game.Gameplay
 {
     public interface IGameContext
     {
-        IObservable<Unit> SetGame(GameParams gameParams);
+        void Setup(GameParams gameParams);
     }
     
     public class GameContext : IGameContext
     {
-        private GameParams _lastGame;
-        private GameObject _currentIntance;
-        
-        public IObservable<Unit> SetGame(GameParams gameParams)
+        public void Setup(GameParams gameParams)
         {
-            throw new NotImplementedException();
-        }
-
-        public GameObject CreateGameInstance()
-        {
-            throw new NotImplementedException();
+            Debug.LogError($"{gameParams.LevelData}");
         }
     }
 }

@@ -21,6 +21,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - Level
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6b86efca1942ca649ab4e338bdd32204
+    m_Address: Games
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a25137820a45c5a4989bfad0068a5e87
     m_Address: UI
     m_ReadOnly: 0

@@ -22,6 +22,33 @@ namespace Game.AssetManagement
 
     public static class IAssetProviderExtensions
     {
+        public static IObservable<T> LoadAssetAsObservable<T>(this IAssetProvider assetProvider, string path) where T : Object
+        {
+            var state = assetProvider.GetAssetState(path);
+
+            if (state == AssetState.Loaded)
+            {
+                return Observable.Return(assetProvider.GetAsset<T>(path));
+            }
+
+            if (state == AssetState.NotLoaded)
+            {
+                assetProvider.PreloadAsset<T>(path).Forget();
+            }
+            
+            //если уже предзагружен и имплементация ассет провайдера сразу выстрелит ивент
+            state = assetProvider.GetAssetState(path);
+            if (state == AssetState.Loaded)
+            {
+                return Observable.Return(assetProvider.GetAsset<T>(path));
+            }
+
+            return assetProvider.AssetLoaded
+                .Where(loadedPath => loadedPath == path)
+                .Take(1)
+                .Select(_ => assetProvider.GetAsset<T>(path));
+        }
+        
         public static async UniTask PreloadAssets(this IAssetProvider assetProvider, IEnumerable<string> paths)
         {
             var tasks = ListPool<UniTask>.Get();

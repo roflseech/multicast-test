@@ -6,7 +6,6 @@ namespace Game.AssetManagement
 {
     public interface ISpriteProvider
     {
-        //UniTask<Sprite> GetSprite(string path);
         IObservable<Sprite> GetSpriteAsObservable(string path);
     }
 }

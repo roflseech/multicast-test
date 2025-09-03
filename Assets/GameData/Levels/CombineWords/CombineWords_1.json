@@ -2,24 +2,26 @@
   "Rows": 4,
   "Columns": 6,
   "TargetWords": [
-    "CASTLE",
-    "BRIDGE",
-    "FLOWER",
-    "PARENT"
+    "GARDEN",
+    "MARKET",
+    "BUTTON",
+    "SIMPLE"
   ],
   "AvailableCLusters": [
-    "CAS",
-    "TLE",
-    "BRI",
-    "DGE",
-    "FLO",
-    "WER",
-    "PAR",
-    "ENT",
-    "SUN",
-    "TOP",
-    "MIX",
-    "QUA",
-    "ZED"
+    "GA",
+    "RD",
+    "EN",
+    "MA",
+    "RK",
+    "ET",
+    "BUT",
+    "TON",
+    "SIM",
+    "PLE",
+    "CA",
+    "DO",
+    "RU",
+    "FI",
+    "ICE"
   ]
 }

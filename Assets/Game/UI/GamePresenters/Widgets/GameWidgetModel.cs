@@ -7,22 +7,23 @@ namespace Game.UI.GamePresenters.Widgets
 {
     public interface IGameWidgetModel
     {
-        IObservable<GameState> State { get; }
+        IObservable<bool> IsLoading { get; }
         IObservable<GameParams> CurrentGame { get; }
         IObservable<Unit> OnCompleted { get; }
         void NotifyCompleted(string levelCompletionData);
         string GetLevelCompletionData();
+        void SetLoadingState(bool state);
     }
     
     public class GameWidgetModel : IGameWidgetModel
     {
-        private readonly ObservableValue<GameState> _state = new();
         private readonly ObservableValue<GameParams> _currentGame = new(GameParams.Undefined);
         private readonly ObservableEvent _onCompleted = new();
+        private readonly ObservableValue<bool> _isLoading = new();
 
         private string _levelCompletionData;
-        
-        public IObservable<GameState> State => _state;
+
+        public IObservable<bool> IsLoading => _isLoading;
         public IObservable<GameParams> CurrentGame => _currentGame.Where(x => x.IsValid());
         public IObservable<Unit> OnCompleted => _onCompleted;
         
@@ -40,6 +41,11 @@ namespace Game.UI.GamePresenters.Widgets
         public string GetLevelCompletionData()
         {
             return _levelCompletionData;
+        }
+
+        public void SetLoadingState(bool state)
+        {
+            _isLoading.Value = state;
         }
     }
 }

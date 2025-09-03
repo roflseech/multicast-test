@@ -2,24 +2,27 @@
   "Rows": 4,
   "Columns": 6,
   "TargetWords": [
-    "GARDEN",
-    "SISTER",
-    "MARKET",
-    "PLAYER"
+    "WINTER",
+    "BRIGHT",
+    "DANGER",
+    "CIRCLE"
   ],
   "AvailableCLusters": [
-    "GAR",
-    "DEN",
-    "SIS",
-    "TER",
-    "MAR",
-    "KET",
-    "PLA",
-    "YER",
-    "HOT",
-    "CAR",
-    "BIG",
-    "OLD",
-    "NEW"
+    "WI",
+    "NT",
+    "ER",
+    "ER",
+    "BR",
+    "IG",
+    "HT",
+    "DA",
+    "NG",
+    "CIR",
+    "CLE",
+    "CO",
+    "WA",
+    "HE",
+    "FA",
+    "GOOD"
   ]
 }

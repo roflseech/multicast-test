@@ -2,24 +2,26 @@
   "Rows": 4,
   "Columns": 6,
   "TargetWords": [
-    "PLANET",
-    "FOREST",
-    "ANIMAL",
-    "WINDOW"
+    "COFFEE",
+    "FABRIC",
+    "PERSON",
+    "ISLAND"
   ],
   "AvailableCLusters": [
-    "PLA",
-    "NET",
-    "FOR",
-    "EST",
-    "ANI",
-    "MAL",
-    "WIN",
-    "DOW",
-    "ICE",
-    "BOX",
-    "JOY",
-    "RUN",
-    "KEP"
+    "CO",
+    "FF",
+    "EE",
+    "FA",
+    "BR",
+    "IC",
+    "PE",
+    "RS",
+    "ON",
+    "IS",
+    "LAND",
+    "SH",
+    "WA",
+    "SA",
+    "ROCK"
   ]
 }

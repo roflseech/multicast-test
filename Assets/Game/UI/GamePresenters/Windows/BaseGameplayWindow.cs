@@ -11,11 +11,13 @@ namespace Game.UI.GamePresenters.Windows
     {
         [SerializeField] private ButtonWidget _backButton;
         [SerializeField] private GameWidget _gameWidget;
+        [SerializeField] private GameObject _loader;
         
         protected override void SetBindings(IBaseGameplayWindowModel model, CompositeDisposable bindings)
         {
             _backButton.Bind(model.BackButton);
             model.GameWidget.Subscribe(_gameWidget.Bind).AddTo(bindings);
+            model.ShowLoadingBar.Subscribe(_loader.SetActive).AddTo(bindings);
         }
 
         protected override void OnWindowOpen()

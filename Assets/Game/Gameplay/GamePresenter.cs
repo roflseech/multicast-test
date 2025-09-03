@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.AssetManagement;
 using Game.Common.UniRXExtensions;
@@ -21,6 +22,8 @@ namespace Game.Gameplay
         private GameParams _currentGameParams = GameParams.Undefined;
         private GameObject _currentGameInstance;
         private string _levelCompletionData;
+        private CancellationTokenSource _cancellationTokenSource = new();
+        private bool _isLoadingGame;
         public IReadOnlyObservableValue<bool> IsReady => _isReady;
         public IObservable<Unit> OnCompleted => _onCompleted;
 
@@ -37,6 +40,12 @@ namespace Game.Gameplay
         
         public void SetGame(GameParams gameParams)
         {
+            if (_isLoadingGame)
+            {
+                Debug.LogError("LoadAndInstantiateGame is already in progress. Cannot call SetGame while loading.");
+                return;
+            }
+            
             if (_currentGameParams.GameName == gameParams.GameName)
             {
                 _currentGameParams = gameParams;
@@ -44,6 +53,10 @@ namespace Game.Gameplay
                 return;
             }
 
+            _cancellationTokenSource.Cancel();
+            _cancellationTokenSource.Dispose();
+            _cancellationTokenSource = new CancellationTokenSource();
+            
             _disposable.Clear();
             _isReady.Value = false;
             
@@ -54,35 +67,55 @@ namespace Game.Gameplay
 
             _currentGameParams = gameParams;
             
-            LoadAndInstantiateGame(gameParams).Forget();
+            LoadAndInstantiateGame(gameParams, _cancellationTokenSource.Token).Forget();
         }
 
-        private async UniTask LoadAndInstantiateGame(GameParams gameParams)
+        private async UniTask LoadAndInstantiateGame(GameParams gameParams, CancellationToken cancellationToken)
         {
-            await _gameDataLoader.LoadGame(gameParams.GameName);
+            _isLoadingGame = true;
             
-            var gamePrefab = _gameDataLoader.GetGame(gameParams.GameName);
-            if (gamePrefab == null)
+            try
             {
-                Debug.LogError($"Game prefab not found for: {gameParams.GameName}");
-                return;
+                await _gameDataLoader.LoadGame(gameParams.GameName);
+                cancellationToken.ThrowIfCancellationRequested();
+                
+                var gamePrefab = _gameDataLoader.GetGame(gameParams.GameName);
+                if (gamePrefab == null)
+                {
+                    Debug.LogError($"Game prefab not found for: {gameParams.GameName}");
+                    return;
+                }
+
+                _currentGameInstance = Instantiate(gamePrefab, _container);
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var contextHolder = _currentGameInstance.GetComponent<IGameContextHolder>();
+                var context = contextHolder.Context;
+                await context.IsReady.Where(x => x).ToUniTask(true, cancellationToken: cancellationToken);
+                
+                Setup(_currentGameInstance);
+                
+                context.OnCompleted.Subscribe(_ =>
+                {
+                    _levelCompletionData = context.GetLevelCompletionData();
+                    _onCompleted.Invoke();
+                }).AddTo(_disposable);
+                
+                _isReady.Value = true;
             }
-
-            _currentGameInstance = Instantiate(gamePrefab, _container);
-
-            var contextHolder = _currentGameInstance.GetComponent<IGameContextHolder>();
-            var context = contextHolder.Context;
-            await context.IsReady.Where(x => x).ToUniTask(true);
-            
-            Setup(_currentGameInstance);
-            
-            context.OnCompleted.Subscribe(_ =>
+            catch (OperationCanceledException)
             {
-                _levelCompletionData = context.GetLevelCompletionData();
-                _onCompleted.Invoke();
-            }).AddTo(_disposable);
-            
-            _isReady.Value = true;
+                Debug.Log("LoadAndInstantiateGame was cancelled");
+                if (_currentGameInstance != null)
+                {
+                    Destroy(_currentGameInstance);
+                    _currentGameInstance = null;
+                }
+            }
+            finally
+            {
+                _isLoadingGame = false;
+            }
         }
 
         private void Setup(GameObject gameInstance)
@@ -106,6 +139,9 @@ namespace Game.Gameplay
 
         private void OnDestroy()
         {
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource?.Dispose();
+            
             DestroyCurrentGame();
             _isReady.Value = false;
             _disposable.Dispose();

@@ -29,6 +29,8 @@ namespace Game.UI.GameModels.Widgets
                 _gamePresenters.SetGame(data);
             }).AddTo(bindings);
 
+            _gamePresenters.IsReady.Subscribe(model.SetLoadingState).AddTo(bindings);
+            
             _gamePresenters.OnCompleted.Subscribe(_ =>
             {
                 model.NotifyCompleted(_gamePresenters.GetLevelCompletionData());

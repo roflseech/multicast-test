@@ -1,4 +1,5 @@
 ﻿using System;
+using Game.Common.UniRXExtensions;
 using Game.DomainLogic;
 using Game.UI.GameLayers;
 using Game.UI.GameModels.Widgets;
@@ -20,12 +21,14 @@ namespace Game.UI.GameModels.Windows
         private readonly IUiAggregate _uiAggregate;
         private readonly ICurrentGame _currentGame;
         private readonly IWindowFactory _windowFactory;
+
+        private readonly ObservableValue<bool> _isReady = new();
         
         private IButtonWidgetModel _backButton;
 
         private string _levelCompletionData;
-        
-        public IObservable<bool> ShowLoadingBar => Observable.Return(false);
+
+        public IObservable<bool> ShowLoadingBar => _isReady.Select(x => !x);
 
         public IButtonWidgetModel BackButton => _backButton ??= new ButtonWidgetModel(
             () => _uiAggregate.Get(UiLayer.Main).OpenSingletonWindow<IHomeWindowModel>());
@@ -43,11 +46,13 @@ namespace Game.UI.GameModels.Windows
             var model = new GameWidgetModel();
             o.OnNext(model);
 
+            model.IsLoading.Subscribe(x => _isReady.Value = x).AddTo(disposable);
+            
             _currentGame.ObserveValid().Subscribe(data =>
-                {
-                    model.SetGame(data);
-                })
-                .AddTo(disposable);
+            {
+                model.SetGame(data);
+            })
+            .AddTo(disposable);
             
             model.OnCompleted.Subscribe(_ =>
             {

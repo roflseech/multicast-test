@@ -1,0 +1,24 @@
+{
+    "name": "Games.CombineWordsGame",
+    "rootNamespace": "",
+    "references": [
+        "GUID:560b04d1a97f54a4e82edc0cbbb69285",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:3d4b6c0903fce1f4f8b8e217b1092b29",
+        "GUID:77f02654db3ff5c4bba2dd0fcf3a1c8e",
+        "GUID:6beda9e3e8a1d414b9b62dda03aacac7",
+        "GUID:b0214a6008ed146ff8f122a6a9c2f6cc",
+        "GUID:33661e06c33d31b4c9223810bf503247",
+        "GUID:61934763b21ba0e40924a70ab26dab48",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

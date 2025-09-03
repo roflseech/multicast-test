@@ -15,7 +15,7 @@ namespace Game.Games.CombineWordsGame.Entities
         
         public void Detach(IEntity entity)
         {
-            entity.Transform.parent = null;
+            entity.Transform.SetParent(null);
         }
 
         public bool CanAttach(IEntity entity)
@@ -30,7 +30,8 @@ namespace Game.Games.CombineWordsGame.Entities
 
         public void Attach(IEntity entity)
         {
-            entity.Transform.parent = _container;
+            entity.Transform.SetParent(_container, false);
+            entity.Transform.localScale = Vector3.one;
             UpdateLayout();
         }
 

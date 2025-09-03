@@ -72,7 +72,8 @@ namespace Game.Games.CombineWordsGame.Entities
                 object obj = _entries[i].Entity;
                 if (obj == entity)
                 {
-                    _entries[i].Entity.Transform.parent = null;
+                    _entries[i].Entity.Transform.SetParent(null);
+                    _entries[i].Entity.Transform.localScale = Vector3.one;
                     _entries.RemoveAt(i);
                     return;
                 }

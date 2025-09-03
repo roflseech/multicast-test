@@ -12,6 +12,7 @@
 /.vs
 /.vsconfig
 /.vscode
+/.utmp
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data

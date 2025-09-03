@@ -28,6 +28,7 @@ namespace Game.Games.CombineWordsGame.Visual
             while (_letterVisuals.Count < requiredCount)
             {
                 var newLetter = Instantiate(_letter, _letter.transform.parent);
+                newLetter.transform.localScale = Vector3.one;
                 _letterVisuals.Add(newLetter);
                 newLetter.transform.SetSiblingIndex(prevLetter.transform.GetSiblingIndex() + 1);
                 

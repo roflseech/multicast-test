@@ -1,6 +1,5 @@
 ﻿using System;
 using Game.Common.UniRXExtensions;
-using Game.State;
 using UniRx;
 
 namespace Game.SaveSystem

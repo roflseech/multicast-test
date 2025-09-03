@@ -1,0 +1,22 @@
+{
+    "name": "DomainLogic",
+    "rootNamespace": "",
+    "references": [
+        "GUID:560b04d1a97f54a4e82edc0cbbb69285",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:61934763b21ba0e40924a70ab26dab48",
+        "GUID:ae7de04bb5905f34d857d84c8e13501e",
+        "GUID:77f02654db3ff5c4bba2dd0fcf3a1c8e",
+        "GUID:6beda9e3e8a1d414b9b62dda03aacac7",
+        "GUID:ad856df156431ac42895dd60e627e35e"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

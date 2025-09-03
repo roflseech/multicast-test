@@ -16,9 +16,14 @@ namespace Game.AppFlow.EntryPoints
         {
             var root = VContainerSettings.Instance.GetOrCreateRootLifetimeScopeInstance();
 
-            if (root is RootInstaller rootInstaller)
+            if (root != null && root is RootInstaller rootInstaller)
             {
                 await rootInstaller.InitializeAsync();
+            }
+            else
+            {
+                Debug.LogError("Root is not installed");
+                return;
             }
             
             Build();
@@ -45,6 +50,7 @@ namespace Game.AppFlow.EntryPoints
         
             public async UniTask StartAsync(CancellationToken cancellation = new CancellationToken())
             {
+                Application.targetFrameRate = 60;
                 _saveDataManager.Initialize();
                 await _saveDataManager.LoadAllDataAsync();
                 await _levelLoader.UpdateDatabaseAsync();

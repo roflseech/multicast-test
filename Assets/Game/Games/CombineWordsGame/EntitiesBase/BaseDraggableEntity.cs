@@ -110,9 +110,13 @@ namespace Game.Games.CombineWordsGame.EntitiesBase
             foreach (var result in results)
             {
                 var ownerCandidate = result.gameObject.GetComponent<IEntityOwner>();
-                
+
                 if (ownerCandidate == null)
-                    continue;
+                {
+                    ownerCandidate = result.gameObject.GetComponentInParent<IEntityOwner>();
+                }
+                
+                if (ownerCandidate == null) continue;
 
                 if (ownerCandidate == Owner)
                 {

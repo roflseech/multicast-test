@@ -70,7 +70,8 @@ namespace Game.Games.CombineWordsGame.Flow
                 {
                     _wordsRemaining.Value -= 1;
                 });
-                letterRow.transform.SetParent(_entities.RowContainer, true);
+                letterRow.transform.SetParent(_entities.RowContainer, false);
+                letterRow.transform.localScale = Vector3.one;
             }
 
             var clusters = ListPool<WordCluster>.Get();

@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.AssetManagement;
+using Game.SaveSystem;
 using Game.UI.GameLayers;
 using Game.UI.GameModels.Windows;
 using UnityEngine;
@@ -33,15 +34,19 @@ namespace Game.AppFlow.EntryPoints
         {
             private readonly IUiAggregate _uiAggregate;
             private readonly ILevelLoader _levelLoader;
+            private readonly ISaveDataManager _saveDataManager;
             
-            public EntryPoint(IUiAggregate uiAggregate, ILevelLoader levelLoader)
+            public EntryPoint(IUiAggregate uiAggregate, ILevelLoader levelLoader, ISaveDataManager saveDataManager)
             {
                 _uiAggregate = uiAggregate;
                 _levelLoader = levelLoader;
+                _saveDataManager = saveDataManager;
             }
         
             public async UniTask StartAsync(CancellationToken cancellation = new CancellationToken())
             {
+                _saveDataManager.Initialize();
+                await _saveDataManager.LoadAllDataAsync();
                 await _levelLoader.UpdateDatabaseAsync();
                 await _uiAggregate.Get(UiLayer.Main).PreloadAllWindows();
                 await _uiAggregate.Get(UiLayer.Popup).PreloadAllWindows();

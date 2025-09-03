@@ -8,6 +8,7 @@ namespace Game.Common.UnityExtensions
         {
             foreach (Transform t in transform)
             {
+                Debug.Log(t);
                 if (t != transform) GameObject.Destroy(t.gameObject);
             }
         }

@@ -13,6 +13,8 @@ namespace Game.SaveSystem.Storage
         {
             var filePath = GetFilePath(key);
             
+            Debug.Log(key);
+            Debug.Log(filePath);
             try
             {
                 using var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
@@ -27,7 +29,7 @@ namespace Game.SaveSystem.Storage
         public async UniTask LoadAsync(string key, ArrayBufferWriter<byte> bufferWriter)
         {
             var filePath = GetFilePath(key);
-            
+
             if (!File.Exists(filePath))
             {
                 Debug.LogError($"Can't find data for key: {key}");
@@ -38,14 +40,21 @@ namespace Game.SaveSystem.Storage
             {
                 using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
                 
-                var buffer = bufferWriter.GetMemory();
-                int bytesRead = 0;
-
-                do
+                var fileLength = (int)fileStream.Length;
+                bufferWriter.Clear();
+                
+                var buffer = bufferWriter.GetMemory(fileLength);
+                int totalBytesRead = 0;
+                
+                while (totalBytesRead < fileLength)
                 {
-                    bytesRead = await fileStream.ReadAsync(buffer);
-                    bufferWriter.Advance(bytesRead);
-                } while (bytesRead > 0);
+                    int bytesRead = await fileStream.ReadAsync(buffer.Slice(totalBytesRead));
+                    if (bytesRead == 0)
+                        break;
+                    totalBytesRead += bytesRead;
+                }
+                
+                bufferWriter.Advance(totalBytesRead);
             }
             catch (Exception ex)
             {

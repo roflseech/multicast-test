@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6b72dd6d4df4a9fb60de9fa97c4814e, type: 3}
   m_Name: CombinedWordsGameParams
   m_EditorClassIdentifier: 
-  <VerticalDragThreshold>k__BackingField: 20
-  <HorizontalScrollThreshold>k__BackingField: 10
+  <VerticalDragThreshold>k__BackingField: 10
+  <HorizontalScrollThreshold>k__BackingField: 15

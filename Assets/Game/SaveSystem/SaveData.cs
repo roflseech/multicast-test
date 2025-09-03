@@ -1,6 +1,7 @@
 ﻿using System;
 using Game.Common.UniRXExtensions;
 using Game.State;
+using UniRx;
 
 namespace Game.SaveSystem
 {
@@ -16,7 +17,7 @@ namespace Game.SaveSystem
         
         public IDisposable Subscribe(IObserver<T> observer)
         {
-            return _value.Subscribe(observer);
+            return _value.Skip(1).Subscribe(observer);
         }
         
         public void Publish(T value)

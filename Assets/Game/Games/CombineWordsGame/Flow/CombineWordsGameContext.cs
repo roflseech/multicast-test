@@ -50,11 +50,12 @@ namespace Game.Games.CombineWordsGame.Flow
             
             _entities.RowContainer.ClearObjectsUnderTransform();
             _entities.BottomRepository.Clear();
+            _entities.ElementsContainer.ClearObjectsUnderTransform();
             
             var levelData = _levelDataParser.Parse<CombineWordsLevelData>(gameParams.LevelData);
 
             using var sb = new Utf16ValueStringBuilder(true);
-
+            
             foreach (var word in levelData.TargetWords)
             {
                 sb.Append(word);

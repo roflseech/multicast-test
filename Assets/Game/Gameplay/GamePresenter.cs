@@ -39,6 +39,7 @@ namespace Game.Gameplay
         {
             if (_currentGameParams.GameName == gameParams.GameName)
             {
+                _currentGameParams = gameParams;
                 Setup(_currentGameInstance);
                 return;
             }

@@ -24,6 +24,7 @@ namespace Game.SaveSystem
         private readonly CompositeDisposable _disposable = new();
         
         private readonly Dictionary<string, KeyData> _keyData = new();
+        private readonly Dictionary<string, SaveOperation> _saveOperations = new();
 
         private bool _loading;
         
@@ -77,7 +78,7 @@ namespace Game.SaveSystem
             }
 
             await _persistantDataStorage.LoadAsync(key, _runtimeDataStorage.GetWriter(key));
-
+            
             keyData.PublishValue();
         }
         
@@ -92,9 +93,9 @@ namespace Game.SaveSystem
 
             keyData.PublishValue = () =>
             {
-                GetSaveData().Publish(defaultValue);
+                GetSaveData().Publish(_runtimeDataStorage.Get<T>(key));
             };
-
+            
             keyData.SaveOnUpdate = () =>
             {
                 return GetSaveData().Subscribe(value =>
@@ -102,7 +103,7 @@ namespace Game.SaveSystem
                     if (_loading) return;
                     
                     _runtimeDataStorage.Set(key, value);
-                    RequestSave();
+                    RequestSave(key);
                 });
             };
             
@@ -114,9 +115,52 @@ namespace Game.SaveSystem
             }
         }
 
-        private void RequestSave()
+        private void RequestSave(string key)
         {
+            Debug.Log(key);
+            if (_saveOperations.TryGetValue(key, out var existingOperation))
+            {
+                if (existingOperation.IsInProgress)
+                {
+                    existingOperation.HasPendingSave = true;
+                }
+                else
+                {
+                    StartSaveOperation(key, existingOperation);
+                }
+            }
+            else
+            {
+                var operation = new SaveOperation();
+                _saveOperations[key] = operation;
+                StartSaveOperation(key, operation);
+            }
+        }
+
+        private void StartSaveOperation(string key, SaveOperation operation)
+        {
+            operation.IsInProgress = true;
+            SaveToStorageAsync(key, operation).Forget();
+        }
+
+        private async UniTaskVoid SaveToStorageAsync(string key, SaveOperation operation)
+        {
+            do
+            {
+                try
+                {
+                    var writer = _runtimeDataStorage.GetWriter(key);
+                    await _persistantDataStorage.SaveAsync(key, writer);
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"Failed to save data for key '{key}': {ex}");
+                }
+                
+            } while (operation.HasPendingSave);
             
+            operation.IsInProgress = false;
+            _saveOperations.Remove(key);
         }
         
         public void Dispose()
@@ -129,6 +173,12 @@ namespace Game.SaveSystem
             public Action SetDefaultValue;
             public Action PublishValue;
             public Func<IDisposable> SaveOnUpdate;
+        }
+
+        private class SaveOperation
+        {
+            public bool HasPendingSave { get; set; }
+            public bool IsInProgress { get; set; }
         }
     }
 }

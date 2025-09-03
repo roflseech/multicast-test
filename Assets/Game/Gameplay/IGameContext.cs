@@ -1,4 +1,5 @@
 ﻿using System;
+using Cysharp.Threading.Tasks;
 using Game.AssetManagement;
 using Game.Common.UniRXExtensions;
 using UniRx;
@@ -8,14 +9,10 @@ namespace Game.Gameplay
 {
     public interface IGameContext
     {
+        IObservable<Unit> OnCompleted { get; }
+        IReadOnlyObservableValue<bool> IsReady { get; }
         void Setup(GameParams gameParams);
-    }
-    
-    public class GameContext : IGameContext
-    {
-        public void Setup(GameParams gameParams)
-        {
-            Debug.LogError($"{gameParams.LevelData}");
-        }
+        void SetReady();
+        string GetLevelCompletionData();
     }
 }

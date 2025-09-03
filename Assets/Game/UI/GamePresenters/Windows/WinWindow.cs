@@ -11,12 +11,14 @@ namespace Game.UI.GamePresenters.Windows
         [SerializeField] private ButtonWithTextWidget _nextLevelButton;
         [SerializeField] private ButtonWithTextWidget _mainMenuButton;
         [SerializeField] private TextWidget _titleText;
+        [SerializeField] private TextWidget _completionInfoText;
         
         protected override void SetBindings(IWinWindowModel model, CompositeDisposable bindings)
         {
             _titleText.Bind(model.TitleText);
             _nextLevelButton.Bind(model.NextLevelButton);
             _mainMenuButton.Bind(model.MainMenuButton);
+            _completionInfoText.Bind(model.CompletionInfoText);
         }
 
         protected override void OnWindowOpen()

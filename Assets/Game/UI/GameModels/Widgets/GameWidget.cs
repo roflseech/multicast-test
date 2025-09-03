@@ -13,6 +13,7 @@ namespace Game.UI.GameModels.Widgets
 
         private IObjectResolver _resolver;
         
+        
         [Inject]
         public void Construct(IObjectResolver resolver)
         {
@@ -26,6 +27,11 @@ namespace Game.UI.GameModels.Widgets
             model.CurrentGame.Subscribe(data =>
             {
                 _gamePresenters.SetGame(data);
+            }).AddTo(bindings);
+
+            _gamePresenters.OnCompleted.Subscribe(_ =>
+            {
+                model.NotifyCompleted(_gamePresenters.GetLevelCompletionData());
             }).AddTo(bindings);
         }
     }

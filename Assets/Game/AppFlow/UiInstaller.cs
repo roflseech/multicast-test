@@ -33,25 +33,31 @@ namespace Game.AppFlow
             .As<IUiAggregate>();
 
             RegisterSingletonMainWindows(builder);
+            RegisterSingletonPopupWindows(builder);
+            
+            builder.BindSingleton<WindowFactory>();
         }
         
         private static void RegisterMainWindows(UiProviderBuilder builder)
         {
             builder.RegisterWindow<IHomeWindowModel>(config => config.HomeScreenPath);
             builder.RegisterWindow<IBaseGameplayWindowModel>(config => config.BaseGameplayWindowPath);
-            builder.RegisterWindow<IWinWindowModel>(config => config.WinWindowPath);
         }
 
         private static void RegisterSingletonMainWindows(IContainerBuilder builder)
         {
             builder.BindSingleton<HomeWindowModel>();
             builder.BindSingleton<BaseGameplayWindowModel>();
-            builder.BindSingleton<WinWindowModel>();
         }
         
         private static void RegisterPopupWindows(UiProviderBuilder builder)
         {
-
+            builder.RegisterWindow<IWinWindowModel>(config => config.WinWindowPath);
+        }
+        
+        private static void RegisterSingletonPopupWindows(IContainerBuilder builder)
+        {
+            builder.BindSingleton<WinWindowModel>();
         }
         
         private static void AddUiScene(IObjectResolver resolver, UiAggregate uiAggregate, IUiScene uiScene, Action<UiProviderBuilder> registerWindows, UiLayer layer)

@@ -25,7 +25,6 @@ namespace Game.UI.GameModels.Windows
         private readonly ILevelSelector _levelSelector;
             
         private IButtonWithTextWidgetModel _playButton;
-        private ITextWidgetModel _gamesPlayed;
         
         public IButtonWithTextWidgetModel PlayButton => _playButton ??= 
             new ButtonWithTextWidgetModel(
@@ -36,7 +35,7 @@ namespace Game.UI.GameModels.Windows
                     _uiAggregate.Get(UiLayer.Main).OpenSingletonWindow<IBaseGameplayWindowModel>();
                 });
         
-        public ITextWidgetModel GamesPlayed => _gamesPlayed ??= new TextWidgetModel(GAMES_PLAYED_TEXT, true, _playerStatistics.Value.LevelsCompleted.ToString());
+        public ITextWidgetModel GamesPlayed =>  new TextWidgetModel(GAMES_PLAYED_TEXT, true, _playerStatistics.Value.LevelsCompleted.ToString());
         
         public HomeWindowModel(IReadOnlySaveData<PlayerStatistics> playerStatistics, IUiAggregate uiAggregate, 
             ILevelSelector levelSelector)

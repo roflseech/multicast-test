@@ -31,22 +31,20 @@ namespace Game.AppFlow.EntryPoints
 
         private class EntryPoint : IAsyncStartable
         {
-            private readonly ICoreInitializer _coreInitializer;
             private readonly IUiAggregate _uiAggregate;
             private readonly ILevelLoader _levelLoader;
             
-            public EntryPoint(ICoreInitializer coreInitializer, IUiAggregate uiAggregate, ILevelLoader levelLoader)
+            public EntryPoint(IUiAggregate uiAggregate, ILevelLoader levelLoader)
             {
-                _coreInitializer = coreInitializer;
                 _uiAggregate = uiAggregate;
                 _levelLoader = levelLoader;
             }
         
             public async UniTask StartAsync(CancellationToken cancellation = new CancellationToken())
             {
-                await _coreInitializer.InitAsync();
                 await _levelLoader.UpdateDatabaseAsync();
                 await _uiAggregate.Get(UiLayer.Main).PreloadAllWindows();
+                await _uiAggregate.Get(UiLayer.Popup).PreloadAllWindows();
                 _uiAggregate.Get(UiLayer.Main).OpenSingletonWindow<IHomeWindowModel>();
             }
         }

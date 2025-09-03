@@ -32,8 +32,6 @@ namespace Game.AppFlow
 
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.BindSingleton<CoreInitializer>();
-            
             InstallUI(builder);
             InstallResourceManagement(builder);
             InstallConfigs(builder);

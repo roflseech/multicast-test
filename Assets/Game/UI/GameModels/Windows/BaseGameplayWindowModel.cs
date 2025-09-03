@@ -19,29 +19,49 @@ namespace Game.UI.GameModels.Windows
     {
         private readonly IUiAggregate _uiAggregate;
         private readonly ICurrentGame _currentGame;
+        private readonly IWindowFactory _windowFactory;
         
         private IButtonWidgetModel _backButton;
+
+        private string _levelCompletionData;
+        
         public IObservable<bool> ShowLoadingBar => Observable.Return(false);
 
         public IButtonWidgetModel BackButton => _backButton ??= new ButtonWidgetModel(
             () => _uiAggregate.Get(UiLayer.Main).OpenSingletonWindow<IHomeWindowModel>());
 
-        public IObservable<IGameWidgetModel> GameWidget => Observable.Create<IGameWidgetModel>(o =>
-        {
-            var model = new GameWidgetModel();
-            o.OnNext(model);
-
-            return _currentGame.ObserveValid()
-                .Subscribe(data =>
-                {
-                    model.SetGame(data);
-                });
-        });
-
-        public BaseGameplayWindowModel(IUiAggregate uiAggregate, ICurrentGame currentGame)
+        public BaseGameplayWindowModel(IUiAggregate uiAggregate, ICurrentGame currentGame, IWindowFactory windowFactory)
         {
             _uiAggregate = uiAggregate;
             _currentGame = currentGame;
+            _windowFactory = windowFactory;
+        }
+        
+        public IObservable<IGameWidgetModel> GameWidget => Observable.Create<IGameWidgetModel>(o =>
+        {
+            var disposable = new CompositeDisposable();
+            var model = new GameWidgetModel();
+            o.OnNext(model);
+
+            _currentGame.ObserveValid().Subscribe(data =>
+                {
+                    model.SetGame(data);
+                })
+                .AddTo(disposable);
+            
+            model.OnCompleted.Subscribe(_ =>
+            {
+                _levelCompletionData = model.GetLevelCompletionData();
+                HandleLevelCompleted();
+            }).AddTo(disposable);
+            
+            return disposable;
+        });
+
+        private void HandleLevelCompleted()
+        {
+            _currentGame.MarkCompleted();
+            _uiAggregate.Get(UiLayer.Popup).OpenWindow(_windowFactory.CreateWindow(_levelCompletionData));
         }
 
         public void OnOpen()

@@ -2,6 +2,7 @@ using System;
 using Cysharp.Threading.Tasks;
 using Game.AssetManagement;
 using Game.Common.UniRXExtensions;
+using UniRx;
 using UnityEngine;
 using VContainer;
 
@@ -12,11 +13,21 @@ namespace Game.Gameplay
         [SerializeField] private RectTransform _container;
 
         private readonly ObservableValue<bool> _isReady = new();
-        public IReadOnlyObservableValue<bool> IsReady => _isReady;
-
+        private readonly ObservableEvent _onCompleted = new();
+        
+        private readonly CompositeDisposable _disposable = new();
+        
         private IGameDataLoader _gameDataLoader;
         private GameParams _currentGameParams = GameParams.Undefined;
         private GameObject _currentGameInstance;
+        private string _levelCompletionData;
+        public IReadOnlyObservableValue<bool> IsReady => _isReady;
+        public IObservable<Unit> OnCompleted => _onCompleted;
+
+        public string GetLevelCompletionData()
+        {
+            return _levelCompletionData;
+        }
         
         [Inject]
         public void Construct(IGameDataLoader gameDataLoader)
@@ -24,7 +35,7 @@ namespace Game.Gameplay
             _gameDataLoader = gameDataLoader;
         }
         
-        public async void SetGame(GameParams gameParams)
+        public void SetGame(GameParams gameParams)
         {
             if (_currentGameParams.GameName == gameParams.GameName)
             {
@@ -32,6 +43,7 @@ namespace Game.Gameplay
                 return;
             }
 
+            _disposable.Clear();
             _isReady.Value = false;
             
             if (_currentGameInstance != null)
@@ -41,7 +53,7 @@ namespace Game.Gameplay
 
             _currentGameParams = gameParams;
             
-            await LoadAndInstantiateGame(gameParams);
+            LoadAndInstantiateGame(gameParams).Forget();
         }
 
         private async UniTask LoadAndInstantiateGame(GameParams gameParams)
@@ -56,7 +68,18 @@ namespace Game.Gameplay
             }
 
             _currentGameInstance = Instantiate(gamePrefab, _container);
+
+            var contextHolder = _currentGameInstance.GetComponent<IGameContextHolder>();
+            var context = contextHolder.Context;
+            await context.IsReady.Where(x => x).ToUniTask(true);
+            
             Setup(_currentGameInstance);
+            
+            context.OnCompleted.Subscribe(_ =>
+            {
+                _levelCompletionData = context.GetLevelCompletionData();
+                _onCompleted.Invoke();
+            }).AddTo(_disposable);
             
             _isReady.Value = true;
         }
@@ -84,6 +107,7 @@ namespace Game.Gameplay
         {
             DestroyCurrentGame();
             _isReady.Value = false;
+            _disposable.Dispose();
         }
     }
 }

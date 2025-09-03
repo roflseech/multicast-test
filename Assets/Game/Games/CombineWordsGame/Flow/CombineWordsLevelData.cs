@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Game.Games.CombineWordsGame
+namespace Game.Games.CombineWordsGame.Flow
 {
     [Serializable]
     public class CombineWordsLevelData

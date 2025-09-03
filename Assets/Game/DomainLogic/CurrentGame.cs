@@ -4,6 +4,8 @@ using Cysharp.Threading.Tasks;
 using Game.AssetManagement;
 using Game.Common.UniRXExtensions;
 using Game.Gameplay;
+using Game.SaveSystem;
+using Game.State;
 using UniRx;
 using UnityEngine;
 
@@ -13,6 +15,7 @@ namespace Game.DomainLogic
     {
         IReadOnlyObservableValue<GameParams> Current { get; }
         void SetLevel(string gameName, int level);
+        void MarkCompleted();
     }
 
     public static class CurrentGameExtensions
@@ -26,15 +29,18 @@ namespace Game.DomainLogic
     public class CurrentGame : ICurrentGame
     {
         private readonly ILevelLoader _levelLoader;
+        private readonly ISaveData<PlayerStatistics> _playerStatistics;
+        
         private readonly ObservableValue<GameParams> _current = new();
 
         private bool _loading;
         
         public IReadOnlyObservableValue<GameParams> Current => _current;
         
-        public CurrentGame(ILevelLoader levelLoader)
+        public CurrentGame(ILevelLoader levelLoader, ISaveData<PlayerStatistics> playerStatistics)
         {
             _levelLoader = levelLoader;
+            _playerStatistics = playerStatistics;
         }
 
         public void SetLevel(string gameName, int level)
@@ -48,7 +54,16 @@ namespace Game.DomainLogic
             _current.Value = GameParams.Undefined;
             SetLevelInternal(gameName, level).Forget();
         }
-        
+
+        public void MarkCompleted()
+        {
+            _playerStatistics.Modify(x =>
+            {
+                x.LevelsCompleted += 1;
+                return x;
+            });
+        }
+
         private async UniTask SetLevelInternal(string gameName, int level)
         {
             var current = _current.Value;
